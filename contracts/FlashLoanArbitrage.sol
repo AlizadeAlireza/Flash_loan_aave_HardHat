@@ -48,10 +48,8 @@ contract FlashLoanArbitrage is FlashLoanSimpleReceiverBase {
         address initiator,
         bytes calldata params
     ) external override returns (bool) {
-        //
         // This contract now has the funds requested.
-        // Your logic goes here.
-        //
+        // Our logic goes here.
 
         // Arbirtage operation
         dexContract.depositUSDC(1000000000); // 1000 USDC
@@ -59,9 +57,9 @@ contract FlashLoanArbitrage is FlashLoanSimpleReceiverBase {
         dexContract.depositDAI(dai.balanceOf(address(this)));
         dexContract.sellDAI();
 
-        // At the end of your logic above, this contract owes
+        // At the end of our logic above, this contract owes
         // the flashloaned amount + premiums.
-        // Therefore ensure your contract has enough to repay
+        // Therefore ensure our contract has enough to repay
         // these amounts.
 
         // Approve the Pool contract allowance to *pull* the owed amount

@@ -50,6 +50,7 @@ arbitrage:
    using also use.
 
     we use FlashLoanSimpleReceiverBase:
+
     we need to implement this interface on order to our smart contract
     to be a receiver of a loan of a flash loan.
 
@@ -59,8 +60,8 @@ arbitrage:
     that we're borrowing.
 
 2. we set a contstrucor to take the addressProvider but we're going to call
-   the constructor of FlashLoanSimpleReceiverBase next.
-   we're going to pass in the address to instantiate an instance of the IPOOL address provider interface.
+   the constructor of FlashLoanSimpleReceiverBase.
+   next we're going to pass in the address to instantiate an instance of the IPOOL address provider interface.
 
 3. write the execution option in the interface.
    add it override and curely braces to take it out of an interface.
@@ -110,6 +111,33 @@ so we deposite USDC and this contract will custody the amount of USDC to see tha
 then we're going to buy some DAI token, depositing that to the DAI Holding area and then sell the DAI
 token for a profit.
 
+## flashLoan Arbitrage
+
+1. need to create an interface of the Dex contract in order for our flashLoan contract to talk with Dex contract.
+
+2. need to grab a refrence to the addresses of the tokens that we'll be using : DAI, USDC and DexContractAddress (the place that contract deployed)
+
+3. add custon logic in our executeOperation function.
+
+    1. we're going to requesting 1000 USD loan from Aave.
+    2. deposit it on the Dex contract and buy some DAI token at rate 90%.
+    3. depsoit those DAI tokens back into the DEX contract.
+    4. sell those DAI that we deposit.
+
+    the Dex contract send us back USDC and we have more than we start with it.
+
+4. approve some amount of USDC and DAI token.
+
+    so the Dex contract can pull those amounts for our deposite.
+    but can't do all this with one step.
+
+    this is because the approvals need to be available on the BlockChain before
+    any of these function Run.
+
+5. we don't need to hold the funds in order to approve them.
+
+    so we can still have a zero balance of USDC and put through an approval of whatever we intended to borrow.
+
 ## FlashLoanArbitrage.sol
 
 ### how to make profit here?
@@ -135,3 +163,14 @@ so we're going to start with one USDC.
 2. aave send us the money.
 3. we're going receive the funds , approve the payback and then pay them back right away.
 4. we shouldn't forget the fee. so we need send some USDC to the contract before we run this test.
+
+## on the etherscan
+
+1. first transaction is 1000 USDC into our smart contract.
+2. second one is transfer of 1000 USDC from Smart contract to the Dex contract.
+3. we have some amount of DAI.
+4. deposite that amount of DAI.
+5. we have purchase of USDC with that amount of DAI.
+6. the payback of the loan + the amount of Fee.
+
+last thing is check our flashLoan smartContract.
